@@ -7,12 +7,12 @@ import {
   Container,
   CssBaseline,
   Fab,
-  Fade,
   Grow,
   Toolbar,
   Typography,
 } from "@material-ui/core"
 import FlagIcon from "@material-ui/icons/Flag"
+import ReplayIcon from "@material-ui/icons/Replay"
 import React, { useCallback, useState } from "react"
 import styled from "styled-components"
 import "./App.css"
@@ -28,7 +28,6 @@ import {
   WorkerStatus,
 } from "./model"
 import workerCode from "./worker/worker-puzzle"
-import ReplayIcon from "@material-ui/icons/Replay"
 
 function buildworker(worker: any) {
   const code = worker.toString()
@@ -173,7 +172,7 @@ function App() {
       numberOfSolutionTested: 0,
     })
     setWorkerResult(undefined)
-  }, [setFlagPosition, setWorkerResult, setWorkerRunningInfo])
+  }, [setWorkerResult, setWorkerRunningInfo])
 
   const play = useCallback(() => {
     const worker = buildworker(workerCode)
