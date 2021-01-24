@@ -7,7 +7,8 @@ import {
   Container,
   CssBaseline,
   Fab,
-  Grow,
+  Fade,
+
   Toolbar,
   Typography
 } from "@material-ui/core"
@@ -296,7 +297,7 @@ function App() {
         <Box display={workerResult === undefined ? "block" : "none"}>
           {flagSelectorScreen()}
         </Box>
-        <Grow in={workerResult !== undefined}>{resultScreen()}</Grow>
+        <Fade in={workerResult !== undefined}>{resultScreen()}</Fade>
       </Container>
 
       <WorkerBackdrop open={running}>
