@@ -9,31 +9,25 @@ import {
   Fab,
   Grow,
   Toolbar,
-  Typography,
+  Typography
 } from "@material-ui/core"
 import FlagIcon from "@material-ui/icons/Flag"
 import ReplayIcon from "@material-ui/icons/Replay"
+import * as Comlink from "comlink"
 import React, { useCallback, useState } from "react"
 import styled from "styled-components"
+/* eslint-disable import/no-webpack-loader-syntax */
+import PuzzleWorker from "worker-loader!./worker/worker-puzzle"
 import "./App.css"
 import FlagSelector from "./component/FlagSelector"
 import GridSolution from "./component/GridSolution"
 import {
-  isWorkerResult,
   Piece,
   Point,
-  WorkerParams,
+  PuzzleWorkerComlink,
   WorkerResult,
-  WorkerRunningInfo,
-  WorkerStatus,
+  WorkerRunningInfo
 } from "./model"
-import workerCode from "./worker/worker-puzzle"
-
-function buildworker(worker: any) {
-  const code = worker.toString()
-  const blob = new Blob([`(${code})()`])
-  return new Worker(URL.createObjectURL(blob))
-}
 
 const WorkerBackdrop = styled(Backdrop)`
   z-index: 99;
@@ -147,6 +141,10 @@ const PIECES: Piece[] = [
 ]
 
 function App() {
+  const createPuzleWorker = useCallback(() => {
+    const worker = new PuzzleWorker()
+    return Comlink.wrap<PuzzleWorkerComlink>(worker)
+  }, [])
   const [flagPosition, setFlagPosition] = useState<Point | undefined>(undefined)
   const [running, setRunning] = useState(false)
   const [workerRunningInfo, setWorkerRunningInfo] = useState<WorkerRunningInfo>(
@@ -174,30 +172,39 @@ function App() {
     setWorkerResult(undefined)
   }, [setWorkerResult, setWorkerRunningInfo])
 
-  const play = useCallback(() => {
-    const worker = buildworker(workerCode)
-    worker.onmessage = (e) => {
-      const workerStatus: WorkerStatus = e.data
-      if (isWorkerResult(workerStatus)) {
-        setRunning(false)
-        setWorkerResult(workerStatus)
-      } else {
-        setWorkerRunningInfo(workerStatus)
-      }
-    }
+  const onNewStatusPuzzleWorker = useCallback(
+    (status: WorkerRunningInfo) => {
+      setWorkerRunningInfo(status)
+    },
+    [setWorkerRunningInfo]
+  )
+  const onSolutionReceievedFromPuzzleWorker = useCallback(
+    (result: WorkerResult) => {
+      setRunning(false)
+      setWorkerResult(result)
+    },
+    [setWorkerResult, setRunning]
+  )
 
+  const play = useCallback(async () => {
     if (!flagPosition) return
 
-    const params: WorkerParams = {
-      lines: 7,
-      columns: 7,
-      flagPosition,
-      pieces: PIECES,
-    }
-
     setRunning(true)
-    worker.postMessage(params)
-  }, [flagPosition, setRunning])
+    await createPuzleWorker().play(
+      7,
+      7,
+      flagPosition,
+      PIECES,
+      Comlink.proxy(onNewStatusPuzzleWorker),
+      Comlink.proxy(onSolutionReceievedFromPuzzleWorker)
+    )
+  }, [
+    flagPosition,
+    setRunning,
+    onSolutionReceievedFromPuzzleWorker,
+    onNewStatusPuzzleWorker,
+    createPuzleWorker,
+  ])
 
   const flagSelectorScreen = useCallback(() => {
     return (

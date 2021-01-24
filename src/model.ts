@@ -4,13 +4,6 @@ export type Piece = Point[]
 export type Solution = Cell[][]
 export type Cell = number | undefined
 
-export interface WorkerParams {
-  lines: number
-  columns: number
-  flagPosition: Point
-  pieces: Piece[]
-}
-
 export interface WorkerRunningInfo {
   numberOfSolutionFound: number
   numberOfSolutionTested: number
@@ -24,4 +17,15 @@ export type WorkerStatus = WorkerRunningInfo | WorkerResult
 
 export function isWorkerResult(status: WorkerStatus): status is WorkerResult {
   return (status as WorkerResult).solutions !== undefined
+}
+
+export interface PuzzleWorkerComlink {
+  play: (
+    lines: number,
+    columns: number,
+    flagPosition: Point,
+    pieces: Piece[],
+    statusCallback: (status: WorkerRunningInfo) => void,
+    resultCallback: (result: WorkerResult) => void
+  ) => void
 }
