@@ -14,7 +14,7 @@ import {
 import FlagIcon from "@material-ui/icons/Flag"
 import ReplayIcon from "@material-ui/icons/Replay"
 import * as Comlink from "comlink"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import styled from "styled-components"
 /* eslint-disable import/no-webpack-loader-syntax */
 import PuzzleWorker from "worker-loader!./worker/worker-puzzle"
@@ -140,11 +140,32 @@ const PIECES: Piece[] = [
   ],
 ]
 
+function usePuzzleWorker() {
+  const [worker, setWorker] = useState<Worker | undefined>(undefined)
+
+  useEffect(() => {
+    setWorker(new PuzzleWorker())
+  }, [setWorker])
+
+  const remoteWorker = useMemo(
+    () => {
+      return Comlink.wrap<PuzzleWorkerComlink>(worker!)
+    },
+    [worker]
+  )
+  const terminateWorker = useCallback(() => {
+    worker!.terminate()
+    setWorker(new PuzzleWorker())
+  }, [worker, setWorker])
+
+  return {
+    remoteWorker,
+    terminateWorker,
+  }
+}
+
 function App() {
-  const createPuzleWorker = useCallback(() => {
-    const worker = new PuzzleWorker()
-    return Comlink.wrap<PuzzleWorkerComlink>(worker)
-  }, [])
+  const { remoteWorker, terminateWorker } = usePuzzleWorker()
   const [flagPosition, setFlagPosition] = useState<Point | undefined>(undefined)
   const [running, setRunning] = useState(false)
   const [workerRunningInfo, setWorkerRunningInfo] = useState<WorkerRunningInfo>(
@@ -182,15 +203,16 @@ function App() {
     (result: WorkerResult) => {
       setRunning(false)
       setWorkerResult(result)
+      terminateWorker()
     },
-    [setWorkerResult, setRunning]
+    [setWorkerResult, setRunning, terminateWorker]
   )
 
   const play = useCallback(async () => {
     if (!flagPosition) return
 
     setRunning(true)
-    await createPuzleWorker().play(
+    await remoteWorker.play(
       7,
       7,
       flagPosition,
@@ -203,7 +225,7 @@ function App() {
     setRunning,
     onSolutionReceievedFromPuzzleWorker,
     onNewStatusPuzzleWorker,
-    createPuzleWorker,
+    remoteWorker,
   ])
 
   const flagSelectorScreen = useCallback(() => {
