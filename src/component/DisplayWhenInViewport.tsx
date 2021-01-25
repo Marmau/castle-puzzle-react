@@ -1,4 +1,3 @@
-import { Fade } from "@material-ui/core"
 import { ReactNode } from "react"
 import { useInView } from "react-intersection-observer"
 
