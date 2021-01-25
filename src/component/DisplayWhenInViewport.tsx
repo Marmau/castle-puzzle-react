@@ -29,15 +29,6 @@ export function DisplayWhenInViewport({
           <div>{children}</div>
         </Fade>
       )}
-      {!inView && (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            background: "darkgrey",
-          }}
-        ></div>
-      )}
     </div>
   )
 }
