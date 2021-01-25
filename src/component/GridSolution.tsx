@@ -16,9 +16,8 @@ interface GridSolutionParams {
 
 const Table = styled("div")`
   display: flex;
-  width: 20%;
-  min-width: 200px;
-  min-height: 200px;
+  width: 100%;
+  height: 100%;
   margin: auto;
   user-select: none;
   flex-direction: column;

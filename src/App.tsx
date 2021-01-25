@@ -8,7 +8,6 @@ import {
   CssBaseline,
   Fab,
   Fade,
-
   Toolbar,
   Typography
 } from "@material-ui/core"
@@ -20,6 +19,7 @@ import styled from "styled-components"
 /* eslint-disable import/no-webpack-loader-syntax */
 import PuzzleWorker from "worker-loader!./worker/worker-puzzle"
 import "./App.css"
+import { DisplayWhenInViewport } from "./component/DisplayWhenInViewport"
 import FlagSelector from "./component/FlagSelector"
 import GridSolution from "./component/GridSolution"
 import {
@@ -148,12 +148,9 @@ function usePuzzleWorker() {
     setWorker(new PuzzleWorker())
   }, [setWorker])
 
-  const remoteWorker = useMemo(
-    () => {
-      return Comlink.wrap<PuzzleWorkerComlink>(worker!)
-    },
-    [worker]
-  )
+  const remoteWorker = useMemo(() => {
+    return Comlink.wrap<PuzzleWorkerComlink>(worker!)
+  }, [worker])
   const terminateWorker = useCallback(() => {
     worker!.terminate()
     setWorker(new PuzzleWorker())
@@ -263,9 +260,11 @@ function App() {
         </Typography>
         <Box m={2} display="flex" flexWrap="wrap" justifyContent="center">
           {workerResult?.solutions.map((solution, i) => (
-            <Box key={i} m={1}>
-              <GridSolution solution={solution}></GridSolution>
-            </Box>
+            <DisplayWhenInViewport key={i} width={216} height={216} fade>
+              <Box m={1}>
+                <GridSolution solution={solution}></GridSolution>
+              </Box>
+            </DisplayWhenInViewport>
           ))}
         </Box>
 
