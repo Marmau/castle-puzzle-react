@@ -1,3 +1,4 @@
+import { Fade } from "@material-ui/core"
 import { ReactNode } from "react"
 import { useInView } from "react-intersection-observer"
 
@@ -5,18 +6,17 @@ interface DisplayWhenInViewportParams {
   children: ReactNode
   height: number
   width: number
-  fade?: boolean
 }
 
 export function DisplayWhenInViewport({
   width,
   height,
-  fade,
   children,
 }: DisplayWhenInViewportParams) {
-  const { ref, inView } = useInView({})
+  const { ref, inView } = useInView({
+    rootMargin: "100px 0px",
+  })
 
-  console.log("IN VIEW", inView)
   const style = {
     height: `${height}px`,
     width: `${width}px`,
@@ -24,7 +24,20 @@ export function DisplayWhenInViewport({
 
   return (
     <div ref={ref} style={style}>
-      {inView &&  children}
+      {inView && (
+        <Fade in={true} timeout={500}>
+          <div>{children}</div>
+        </Fade>
+      )}
+      {!inView && (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            background: "darkgrey",
+          }}
+        ></div>
+      )}
     </div>
   )
 }

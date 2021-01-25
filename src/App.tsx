@@ -9,7 +9,7 @@ import {
   Fab,
   Fade,
   Toolbar,
-  Typography
+  Typography,
 } from "@material-ui/core"
 import FlagIcon from "@material-ui/icons/Flag"
 import ReplayIcon from "@material-ui/icons/Replay"
@@ -27,7 +27,7 @@ import {
   Point,
   PuzzleWorkerComlink,
   WorkerResult,
-  WorkerRunningInfo
+  WorkerRunningInfo,
 } from "./model"
 
 const WorkerBackdrop = styled(Backdrop)`
@@ -260,11 +260,11 @@ function App() {
         </Typography>
         <Box m={2} display="flex" flexWrap="wrap" justifyContent="center">
           {workerResult?.solutions.map((solution, i) => (
-            <DisplayWhenInViewport key={i} width={216} height={216} fade>
-              <Box m={1}>
+            <Box key={i} m={1}>
+              <DisplayWhenInViewport width={216} height={216}>
                 <GridSolution solution={solution}></GridSolution>
-              </Box>
-            </DisplayWhenInViewport>
+              </DisplayWhenInViewport>
+            </Box>
           ))}
         </Box>
 
