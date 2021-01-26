@@ -20,7 +20,16 @@ export function isWorkerResult(status: WorkerStatus): status is WorkerResult {
 }
 
 export interface PuzzleWorkerComlink {
-  play: (
+  playAllSolutions: (
+    lines: number,
+    columns: number,
+    flagPosition: Point,
+    pieces: Piece[],
+    statusCallback: (status: WorkerRunningInfo) => void,
+    resultCallback: (result: WorkerResult) => void
+  ) => void
+
+  play1Solution: (
     lines: number,
     columns: number,
     flagPosition: Point,

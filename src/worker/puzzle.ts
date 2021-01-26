@@ -57,7 +57,7 @@ export class Grid {
     return this._cells
   }
 
-  public isIn(point: Point) {
+  public exists(point: Point) {
     return this.lines > point[0] && this.columns > point[1]
   }
 

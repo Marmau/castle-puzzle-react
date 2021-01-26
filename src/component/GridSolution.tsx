@@ -6,7 +6,7 @@ import { Cell, Solution } from "../model"
 function pickColor(seed: number) {
   return (
     "#" +
-    Math.floor(Math.abs(Math.sin(seed) * 16777215) % 16777215).toString(16)
+    Math.floor(Math.abs(Math.sin(Math.pow(seed, 1.5)) * 16777215) % 16777215).toString(16)
   )
 }
 

@@ -11,7 +11,10 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core"
+import AllInclusiveIcon from "@material-ui/icons/AllInclusive"
+import Filter1Icon from "@material-ui/icons/Filter1"
 import FlagIcon from "@material-ui/icons/Flag"
+import RepeatOneIcon from "@material-ui/icons/RepeatOne"
 import ReplayIcon from "@material-ui/icons/Replay"
 import * as Comlink from "comlink"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
@@ -206,11 +209,31 @@ function App() {
     [setWorkerResult, setRunning, terminateWorker]
   )
 
-  const play = useCallback(async () => {
+  const playAllSolutions = useCallback(async () => {
     if (!flagPosition) return
 
     setRunning(true)
-    await remoteWorker.play(
+    await remoteWorker.playAllSolutions(
+      7,
+      7,
+      flagPosition,
+      PIECES,
+      Comlink.proxy(onNewStatusPuzzleWorker),
+      Comlink.proxy(onSolutionReceievedFromPuzzleWorker)
+    )
+  }, [
+    flagPosition,
+    setRunning,
+    onSolutionReceievedFromPuzzleWorker,
+    onNewStatusPuzzleWorker,
+    remoteWorker,
+  ])
+
+  const play1Solution = useCallback(async () => {
+    if (!flagPosition) return
+
+    setRunning(true)
+    await remoteWorker.play1Solution(
       7,
       7,
       flagPosition,
@@ -239,24 +262,40 @@ function App() {
           ></FlagSelector>
         </Box>
         <Box m={2}>
-          <Button
-            onClick={play}
-            variant="contained"
-            color="secondary"
-            disabled={flagPosition === undefined}
-          >
-            Trouver les solutions
-          </Button>
+          <Box m={1} display="inline">
+            <Button
+              onClick={play1Solution}
+              variant="contained"
+              color="secondary"
+              disabled={flagPosition === undefined}
+              startIcon={<Filter1Icon />}
+            >
+              Trouver une solution
+            </Button>
+          </Box>
+          <Box m={1} display="inline">
+            <Button
+              onClick={playAllSolutions}
+              variant="contained"
+              color="secondary"
+              disabled={flagPosition === undefined}
+              startIcon={<AllInclusiveIcon />}
+            >
+              Trouver toutes les solutions
+            </Button>
+          </Box>
         </Box>
       </Box>
     )
-  }, [flagPosition, onSelectPosition, play])
+  }, [flagPosition, onSelectPosition, playAllSolutions, play1Solution])
 
   const resultScreen = useCallback(() => {
     return (
       <Box m={2} textAlign="center" mb={8}>
         <Typography variant="h4">
-          {workerResult?.solutions.length} solutions possibles.
+          {workerResult?.solutions.length === 1
+            ? "Une solution parmi d'autres."
+            : `${workerResult?.solutions.length} solutions possibles.`}
         </Typography>
         <Box m={2} display="flex" flexWrap="wrap" justifyContent="center">
           {workerResult?.solutions.map((solution, i) => (
@@ -267,6 +306,19 @@ function App() {
             </Box>
           ))}
         </Box>
+        {workerResult?.solutions.length === 1 && (
+          <Box m={1}>
+            <Button
+              onClick={play1Solution}
+              variant="contained"
+              color="secondary"
+              disabled={flagPosition === undefined}
+              startIcon={<RepeatOneIcon />}
+            >
+              Une autre !
+            </Button>
+          </Box>
+        )}
 
         <Box position="fixed" bottom="0" right="0" m={3}>
           <Fab
@@ -281,7 +333,7 @@ function App() {
         </Box>
       </Box>
     )
-  }, [workerResult, replay])
+  }, [workerResult, replay, flagPosition, play1Solution])
 
   return (
     <>
