@@ -262,7 +262,7 @@ function App() {
           ></FlagSelector>
         </Box>
         <Box m={2}>
-          <Box m={1} display="inline">
+          <Box m={1} display="inline-block">
             <Button
               onClick={play1Solution}
               variant="contained"
@@ -273,7 +273,7 @@ function App() {
               Trouver une solution
             </Button>
           </Box>
-          <Box m={1} display="inline">
+          <Box m={1} display="inline-block">
             <Button
               onClick={playAllSolutions}
               variant="contained"
