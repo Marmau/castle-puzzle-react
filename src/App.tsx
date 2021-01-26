@@ -261,7 +261,7 @@ function App() {
             onSelectPosition={onSelectPosition}
           ></FlagSelector>
         </Box>
-        <Box m={2}>
+        <Box mt={2} mb={2}>
           <Box m={1} display="inline-block">
             <Button
               onClick={play1Solution}
