@@ -2,7 +2,7 @@
 
 Cette application a pour but de donner toutes les solutions au casse-tête "Le château fort" édité par Faugère.
 
-![Casse-tête du chateau fort](public/illustration-puzzle.jpg | width=200)
+![Casse-tête du chateau fort](public/illustration-puzzle.jpg)
 
 ## Accueil
 
