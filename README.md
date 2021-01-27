@@ -1,9 +1,24 @@
-# Getting Started with Create React App
+# Casse tête du château fort
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Cette application a pour but de donner toutes les solutions au casse-tête "Le château fort" édité par Faugère.
+
+![Casse-tête du chateau fort](public/illustration-puzzle.jpg | width=200)
+
+## Accueil
+
+Sélectionnez où est placé le drapeau puis cherchez les solutions
+
+![Accueil](public/home.png | width=200)
+
+## Solution
+
+Visualisez les solutions
+
+![Solutions](public/solutions.png | width=200)
 
 ## Available Scripts
 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 In the project directory, you can run:
 
 ### `npm start`
