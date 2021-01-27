@@ -2,19 +2,19 @@
 
 Cette application a pour but de donner toutes les solutions au casse-tête "Le château fort" édité par Faugère.
 
-![Casse-tête du chateau fort](public/illustration-puzzle.jpg)
+![Casse-tête du chateau fort](./public/illustration-puzzle.jpg)
 
 ## Accueil
 
 Sélectionnez où est placé le drapeau puis cherchez les solutions
 
-![Accueil](public/home.png | width=200)
+![Accueil](./public/home.png)
 
 ## Solution
 
 Visualisez les solutions
 
-![Solutions](public/solutions.png | width=200)
+![Solutions](./public/solutions.png)
 
 ## Available Scripts
 
