@@ -338,17 +338,19 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar variant="dense">
           <FlagIcon />
           <Typography variant="h6">&nbsp;Le casse-tête de Plaisance</Typography>
         </Toolbar>
       </AppBar>
       <Container maxWidth="xl">
-        <Box display={workerResult === undefined ? "block" : "none"}>
-          {flagSelectorScreen()}
+        <Box mt={8}>
+          <Box display={workerResult === undefined ? "block" : "none"}>
+            {flagSelectorScreen()}
+          </Box>
+          <Fade in={workerResult !== undefined}>{resultScreen()}</Fade>
         </Box>
-        <Fade in={workerResult !== undefined}>{resultScreen()}</Fade>
       </Container>
 
       <WorkerBackdrop open={running}>

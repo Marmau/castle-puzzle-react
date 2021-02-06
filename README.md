@@ -4,6 +4,8 @@ Cette application a pour but de donner toutes les solutions au casse-tête "Le c
 
 ![Casse-tête du chateau fort](public/illustration-puzzle.jpg)
 
+Démo: https://puzzle-plaisance.netlify.app/
+
 ## Accueil
 
 Sélectionnez où est placé le drapeau puis cherchez les solutions
